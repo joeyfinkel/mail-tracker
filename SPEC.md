@@ -338,23 +338,33 @@ After scaffolding, local application commands must run through the repository's 
 
 ### Phase 0 — Foundation
 
-Scaffold workspace, configure Portless, establish domain/contracts packages, Cloudflare environments, D1 migrations, CI, and local test fixtures.
+Scaffold the TanStack Start workspace, configure Portless and Cloudflare, install shadcn, ui-sdk, and react-layout, and establish CI and local test fixtures.
 
-### Phase 1 — Secure Gmail ingestion
+### Phase 1 — Basic landing and Google login
 
-Owner authentication, Google OAuth, one/multiple mailbox connections, initial sync, incremental history sync, Pub/Sub webhook, queues, watch renewal, reconciliation, account health, and deletion.
+Build an intentionally minimal landing page with the single **Continue with Google** login/signup action and one browser-aware extension download link. Implement only the authentication and download plumbing needed to make those actions real.
 
-### Phase 2 — Useful dashboard
+### Phase 2 — Browser extension
 
-Unified activity, reply-state queues, deterministic attention ranking, filters/search, follow-ups, people/domain insights, trends, export, and responsive UI.
+Build the shared Chrome/Firefox WebExtension, Gmail compose tracker insertion, Gmail conversation context, browser-specific manifests/sidebars, store packaging, and permission/privacy review.
 
-### Phase 3 — Browser integration
+### Phase 3 — Dashboard and mailbox pipeline
 
-Shared WebExtension, Chrome/Firefox manifests, Gmail content adapter, injected panel, browser sidebars, store packaging, and permission/privacy review.
+Build secure Gmail ingestion, multiple mailbox connections, the persistent application layout, unified activity, reply-state queues, deterministic attention ranking, filters/search, follow-ups, people/domain insights, tracking analytics, account health, trends, and export.
 
-### Phase 4 — Hardening
+The persistent dashboard shell and resource pages use `@jfdevelops/react-layout`; public landing pages remain structurally separate and should not be forced into the dashboard resource family.
 
-OAuth verification readiness, production observability, recovery drills, performance/load tests, accessibility, data-retention controls, and release documentation.
+### Phase 4 — AI connector
+
+Expose the scoped MCP-compatible connector for `dashboard:read` and `trackers:create`, including revocable authorization, audit logging, idempotency, rate limits, and agent-facing contracts.
+
+### Phase 5 — Production landing page
+
+Replace the intentionally basic landing page with the complete public product site, preserving the existing Google authentication and browser-aware extension download behavior.
+
+### Phase 6 — Hardening
+
+Complete OAuth verification readiness, production observability, recovery drills, performance/load tests, accessibility, data-retention controls, and release documentation.
 
 ## 14. Acceptance criteria for MVP
 
