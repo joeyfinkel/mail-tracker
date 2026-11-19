@@ -1,0 +1,35 @@
+{
+  "name": "mail-tracker-extension",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "build": "pnpm run build:chrome && pnpm run build:firefox",
+    "build:chrome": "wxt build -b chrome",
+    "build:firefox": "wxt build -b firefox --mv3",
+    "dev": "wxt -b chrome",
+    "dev:firefox": "wxt -b firefox",
+    "prepare": "wxt prepare",
+    "test": "vitest run",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "@wxt-dev/module-react": "1.2.2",
+    "class-variance-authority": "^0.7.1",
+    "clsx": "^2.1.1",
+    "lucide-react": "^0.577.0",
+    "react": "19.2.0",
+    "react-dom": "19.2.0",
+    "tailwind-merge": "^3.0.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.3",
+    "@types/react": "^19.2.0",
+    "@types/react-dom": "^19.2.0",
+    "jsdom": "^27.4.0",
+    "typescript": "^6.0.3",
+    "vitest": "^5.1.1",
+    "wxt": "0.21.5"
+  }
+}

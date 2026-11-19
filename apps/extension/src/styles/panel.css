@@ -1,0 +1,55 @@
+.panel {
+  display: grid;
+  gap: 18px;
+  padding: 20px;
+}
+
+.panel--compact {
+  width: 360px;
+}
+
+.panel__header,
+.panel__content {
+  align-items: flex-start;
+  display: flex;
+  gap: 12px;
+}
+
+.panel__header p,
+.panel__content p {
+  color: #666;
+  font-size: 13px;
+  line-height: 1.45;
+  margin: 3px 0 0;
+}
+
+.panel__mark {
+  align-items: center;
+  background: #171717;
+  border-radius: 9px;
+  color: #fff;
+  display: inline-flex;
+  height: 34px;
+  justify-content: center;
+  width: 34px;
+}
+
+.panel__content {
+  background: #fff;
+  border: 1px solid #e7e7e7;
+  border-radius: 10px;
+  padding: 14px;
+}
+
+.status-dot {
+  background: #a3a3a3;
+  border-radius: 999px;
+  flex: 0 0 auto;
+  height: 8px;
+  margin-top: 5px;
+  width: 8px;
+}
+
+.status-dot[data-connected="true"] {
+  background: #16a34a;
+}
