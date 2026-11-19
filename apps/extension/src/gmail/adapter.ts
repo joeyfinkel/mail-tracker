@@ -32,6 +32,18 @@ export function findComposeContexts(root: ParentNode = document): GmailComposeCo
   });
 }
 
+export function insertTrackerPixel(compose: GmailComposeContext, pixelUrl: string) {
+  const pixel = document.createElement('img');
+  pixel.alt = '';
+  pixel.dataset.mailTracker = 'true';
+  pixel.height = 1;
+  pixel.src = pixelUrl;
+  pixel.width = 1;
+  pixel.style.cssText = 'display:block;height:1px;width:1px;';
+  compose.body.append(pixel);
+  compose.body.dispatchEvent(new InputEvent('input', { bubbles: true, inputType: 'insertHTML' }));
+}
+
 export function getGmailPageContext(root: ParentNode = document, locationHash = window.location.hash): GmailPageContext {
   const threadMatch = locationHash.match(/^#(?:inbox|all|sent|search\/[^/]+)\/([^/?#]+)/);
 

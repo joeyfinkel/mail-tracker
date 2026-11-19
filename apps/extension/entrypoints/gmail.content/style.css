@@ -56,3 +56,8 @@
   letter-spacing: 0.08em;
   text-transform: uppercase;
 }
+
+.gmail-panel__content .gmail-panel__status {
+  color: #171717;
+  font-weight: 600;
+}

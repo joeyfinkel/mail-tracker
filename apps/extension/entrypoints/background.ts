@@ -40,7 +40,7 @@ export default defineBackground(() => {
       return { ok: false, error: 'The tracker service is unavailable.' };
     }
 
-    const tracker = (await response.json()) as { html: string; trackerId: string };
+    const tracker = (await response.json()) as { pixelUrl: string; trackerId: string };
 
     return { ok: true, tracker };
   });

@@ -4,7 +4,7 @@ export type ExtensionSession = {
 };
 
 export type TrackerArtifact = {
-  html: string;
+  pixelUrl: string;
   trackerId: string;
 };
 

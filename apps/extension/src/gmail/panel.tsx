@@ -2,12 +2,14 @@ import { MailCheck, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
 import { Button } from '@/src/components/ui/button';
-import { getGmailPageContext } from '@/src/gmail/adapter';
+import { findComposeContexts, getGmailPageContext, insertTrackerPixel } from '@/src/gmail/adapter';
 import { sendExtensionRequest } from '@/src/lib/runtime';
 
 function GmailPanel() {
   const [isOpen, setIsOpen] = useState(false);
   const [context, setContext] = useState(() => getGmailPageContext());
+  const [status, setStatus] = useState<string>();
+  const [isCreatingTracker, setIsCreatingTracker] = useState(false);
 
   useEffect(() => {
     const observer = new MutationObserver(() => setContext(getGmailPageContext()));
@@ -18,6 +20,45 @@ function GmailPanel() {
 
   function openDashboard() {
     void sendExtensionRequest({ type: 'open-dashboard' });
+  }
+
+  async function createTracker() {
+    const compose = findComposeContexts().at(-1);
+
+    if (!compose) {
+      setStatus('Open a compose window first.');
+
+      return;
+    }
+
+    if (compose.recipientEmails.length === 0) {
+      setStatus('Add at least one recipient first.');
+
+      return;
+    }
+
+    setIsCreatingTracker(true);
+    setStatus(undefined);
+
+    const response = await sendExtensionRequest({
+      type: 'create-tracker',
+      recipientEmails: compose.recipientEmails,
+      subject: compose.subject,
+    });
+
+    if (!response.ok) {
+      setStatus(response.error);
+      setIsCreatingTracker(false);
+
+      return;
+    }
+
+    if ('tracker' in response) {
+      insertTrackerPixel(compose, response.tracker.pixelUrl);
+      setStatus('Tracker inserted into your draft.');
+    }
+
+    setIsCreatingTracker(false);
   }
 
   if (!isOpen) {
@@ -47,6 +88,14 @@ function GmailPanel() {
             ? `${context.composeCount} active compose window${context.composeCount === 1 ? '' : 's'}.`
             : 'Start a draft to insert a tracker.'}
         </p>
+        <Button onClick={() => void createTracker()} disabled={isCreatingTracker || context.composeCount === 0}>
+          {isCreatingTracker ? 'Creating tracker…' : 'Insert tracker'}
+        </Button>
+        {status ? (
+          <p className="gmail-panel__status" role="status">
+            {status}
+          </p>
+        ) : null}
         <Button onClick={openDashboard} variant="outline">
           Open dashboard
         </Button>

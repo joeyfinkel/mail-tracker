@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
-import { findComposeContexts, getGmailPageContext } from './adapter';
+import { findComposeContexts, getGmailPageContext, insertTrackerPixel } from './adapter';
 
 describe('Gmail adapter', () => {
   it('extracts compose metadata from a Gmail fixture', () => {
@@ -33,5 +33,25 @@ describe('Gmail adapter', () => {
     document.body.innerHTML = '';
 
     expect(getGmailPageContext(document, '#inbox/FMfcgzQZSabc123').threadId).toBe('FMfcgzQZSabc123');
+  });
+
+  it('inserts a non-executable tracker pixel into a compose body', () => {
+    document.body.innerHTML = `
+      <div role="dialog">
+        <span email="person@example.com"></span>
+        <div role="textbox" contenteditable="true">Hello</div>
+      </div>
+    `;
+    const [compose] = findComposeContexts();
+
+    if (!compose) {
+      throw new Error('Expected the fixture to contain a compose context.');
+    }
+
+    insertTrackerPixel(compose, 'https://tracker.example/pixel/123');
+
+    const pixel = compose.body.querySelector<HTMLImageElement>('img[data-mail-tracker="true"]');
+    expect(pixel).toMatchObject({ alt: '', height: 1, width: 1 });
+    expect(pixel?.src).toBe('https://tracker.example/pixel/123');
   });
 });
