@@ -1,6 +1,11 @@
 {
   "version": 2,
   "skills": {
+    "build-react-layouts": {
+      "source": "./apps/web/node_modules/@jfdevelops/react-layout/skills/build-react-layouts",
+      "sourceType": "local",
+      "computedHash": "a96f38d3761f0ec04de602a998ce15536fa666f23508bb30b321ad1c477961ad"
+    },
     "ui-sdk": {
       "source": "vercel-labs/ui",
       "commit": "3647512865fe0242b749dd8981c51c75ad5f486b",
