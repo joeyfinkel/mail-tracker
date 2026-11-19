@@ -1,10 +1,10 @@
 import { ExternalLink, MailCheck } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { Button } from '@/src/components/ui/button';
+import { Button } from '@mail-tracker/ui/button';
+import { cn } from '@mail-tracker/ui/utils';
 import type { ExtensionSession } from '@/src/lib/messages';
 import { sendExtensionRequest } from '@/src/lib/runtime';
-import { cn } from '@/src/lib/utils';
 
 type ExtensionPanelProps = {
   compact?: boolean;

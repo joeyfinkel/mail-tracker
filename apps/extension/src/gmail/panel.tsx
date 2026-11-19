@@ -1,7 +1,7 @@
 import { MailCheck, X } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-import { Button } from '@/src/components/ui/button';
+import { Button } from '@mail-tracker/ui/button';
 import { findComposeContexts, getGmailPageContext, insertTrackerPixel } from '@/src/gmail/adapter';
 import { sendExtensionRequest } from '@/src/lib/runtime';
 
