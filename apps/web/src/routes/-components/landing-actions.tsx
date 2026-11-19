@@ -1,8 +1,6 @@
-import { Button } from '@ui-sdk/react/button';
+import { Button, buttonVariants } from '@mail-tracker/ui/button';
+import { cn } from '@mail-tracker/ui/utils';
 import { useEffect, useState } from 'react';
-
-import { buttonVariants } from '#/components/ui/button';
-import { cn } from '#/lib/utils';
 
 import { detectBrowser, type SupportedBrowser } from '../-utils/browser';
 

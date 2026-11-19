@@ -1,0 +1,114 @@
+.ui-button {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  display: inline-flex;
+  font: inherit;
+  font-size: 0.875rem;
+  font-weight: 600;
+  gap: 0.5rem;
+  justify-content: center;
+  text-decoration: none;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease,
+    color 120ms ease;
+  white-space: nowrap;
+}
+
+.ui-button:focus-visible {
+  outline: 2px solid var(--ring, #2563eb);
+  outline-offset: 2px;
+}
+
+.ui-button:disabled,
+.ui-button[aria-disabled="true"] {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.ui-button--default {
+  background: var(--primary, #171717);
+  color: var(--primary-foreground, #fff);
+}
+
+.ui-button--default:hover:not(:disabled) {
+  filter: brightness(1.12);
+}
+
+.ui-button--destructive {
+  background: var(--destructive, #b91c1c);
+  color: #fff;
+}
+
+.ui-button--outline {
+  background: var(--background, #fff);
+  border-color: var(--border, #dedede);
+  color: var(--foreground, #171717);
+}
+
+.ui-button--secondary {
+  background: var(--secondary, #f1f1f1);
+  color: var(--secondary-foreground, #171717);
+}
+
+.ui-button--ghost,
+.ui-button--link {
+  background: transparent;
+  color: var(--foreground, #171717);
+}
+
+.ui-button--outline:hover:not(:disabled),
+.ui-button--secondary:hover:not(:disabled),
+.ui-button--ghost:hover:not(:disabled) {
+  background: var(--accent, #f1f1f1);
+}
+
+.ui-button--link:hover:not(:disabled) {
+  text-decoration: underline;
+}
+
+.ui-button--default-size {
+  height: 2.25rem;
+  padding: 0 1rem;
+}
+
+.ui-button--extra-small {
+  height: 1.5rem;
+  padding: 0 0.5rem;
+}
+
+.ui-button--small {
+  height: 2rem;
+  padding: 0 0.75rem;
+}
+
+.ui-button--large {
+  height: 2.5rem;
+  padding: 0 1.5rem;
+}
+
+.ui-button--icon {
+  height: 2.25rem;
+  padding: 0;
+  width: 2.25rem;
+}
+
+.ui-button--icon-extra-small {
+  height: 1.5rem;
+  padding: 0;
+  width: 1.5rem;
+}
+
+.ui-button--icon-small {
+  height: 2rem;
+  padding: 0;
+  width: 2rem;
+}
+
+.ui-button--icon-large {
+  height: 2.5rem;
+  padding: 0;
+  width: 2.5rem;
+}
