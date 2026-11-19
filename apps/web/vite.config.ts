@@ -1,14 +1,16 @@
-import { defineConfig } from 'vite-plus';
+import { cloudflare } from '@cloudflare/vite-plugin';
 
-export default defineConfig({
-  test: {
-    include: ['test/**/*.test.ts'],
-  },
-  run: {
-    tasks: {
-      build: { command: 'tsc -p tsconfig.build.json', dependsOn: [{ task: 'build', from: ['dependencies', 'devDependencies'] }] },
-      typecheck: { command: 'tsc', dependsOn: [{ task: 'build', from: ['dependencies', 'devDependencies'] }] },
-      test: { command: 'vp test run', dependsOn: [{ task: 'build', from: ['dependencies', 'devDependencies'] }] },
-    },
-  },
+import tailwindcss from '@tailwindcss/vite';
+
+import { tanstackStart } from '@tanstack/react-start/plugin/vite';
+
+import viteReact from '@vitejs/plugin-react';
+
+import { defineConfig } from 'vite';
+
+const config = defineConfig({
+  resolve: { tsconfigPaths: true },
+  plugins: [cloudflare({ viteEnvironment: { name: 'ssr' } }), tailwindcss(), tanstackStart(), viteReact()],
 });
+
+export default config;

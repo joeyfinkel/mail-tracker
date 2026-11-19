@@ -11,3 +11,7 @@ Read each skill before the work it describes:
 - [jf-naming-conventions](.agents/skills/jf-naming-conventions/SKILL.md): Choose names for files, directories, packages, functions, types, and public APIs in jfdevelops projects. Read before adding or renaming these elements.
 
 <!-- jfdevelops:end -->
+
+## ui-sdk
+
+Before using ui-sdk, follow the installed `ui-sdk` skill and read `node_modules/@ui-sdk/react/docs/llms.txt`. When building a new component, also search `node_modules/@ui-sdk/react/docs/core.md` by heading and read `node_modules/@ui-sdk/react/docs/rendering.md`.

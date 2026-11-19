@@ -13,14 +13,16 @@ The product consists of:
 2. A shared Chrome and Firefox WebExtension that provides a compact tracker UI and augments Gmail itself.
 3. A Cloudflare-hosted API and synchronization pipeline that securely reads mailbox metadata and selected message content through provider APIs.
 
-This specification uses “tracking” to mean tracking the user's own mailbox activity, workload, and follow-ups. Tracking whether recipients opened or clicked outgoing mail is out of scope for the MVP and is described separately under Future Work.
+Tracking includes both the user's mailbox activity/workload and outbound email engagement. The application can create a unique tracker for an outgoing email and report probabilistic open/click events. The UI must explain that image blocking, proxies, security scanners, and link-protection products can produce false positives or false negatives.
 
 ## 2. Goals
 
 - Connect two or more Gmail or Google Workspace accounts to one personal profile.
+- Offer exactly one login and signup method: Google OAuth. No passwords, magic links, passkeys, or additional social providers are exposed.
 - Provide a unified inbox/activity view without requiring the user to switch Google accounts.
 - Highlight unanswered mail, promised follow-ups, stale conversations, high-volume senders, and account-level trends.
 - Make the most useful tracker context available inside `mail.google.com` in Chrome and Firefox.
+- Let authenticated AI agents create trackers for emails and read dashboard data through a scoped connector.
 - Keep all data private to one owner, minimize stored message content, and make account disconnection and data deletion straightforward.
 - Deploy the application backend, frontend, database, jobs, and static assets on Cloudflare where practical.
 - Use the repository's Portless-backed development workflow exclusively for local application access.
@@ -31,7 +33,7 @@ This specification uses “tracking” to mean tracking the user's own mailbox a
 - Supporting providers other than Gmail / Google Workspace.
 - Team workspaces, shared inboxes, delegation, billing, or public signup.
 - Replacing the Gmail inbox or implementing a full mail client.
-- Guaranteed read receipts, recipient surveillance, or pixel-based open tracking.
+- Claiming guaranteed read receipts or presenting inferred opens/clicks as certainty.
 - Mobile applications.
 - Training models on mailbox data.
 
@@ -69,19 +71,32 @@ When the owner visits Gmail with the extension installed:
 - On a conversation, the panel shows tracker-derived context: account, last activity, reply state, age, follow-up state, and a link to the full dashboard.
 - The injected UI is isolated from Gmail styling (Shadow DOM) and fails closed if Gmail's DOM changes.
 - The extension never reads Google session cookies or scrapes message bodies for server synchronization. Mail data comes from the authenticated backend and Gmail API.
+- The compose integration can create and insert an owner-authorized tracker into an outgoing message and records which mailbox/conversation it belongs to.
 
 Browser-native side panels may be offered as an additional entry point. Chrome and Firefox have different sidebar APIs, so the Gmail-injected panel is the consistent cross-browser experience.
+
+### 4.4 Agent connector
+
+An authenticated agent can connect through an MCP-compatible endpoint and:
+
+- Create a tracker for an outgoing email, returning the HTML/image or tracked-link artifact needed for insertion.
+- Read summary metrics, attention queues, conversations, people/domain insights, and tracker events visible on the dashboard.
+- Filter and paginate results using the same provider-neutral contracts as the web application.
+
+Agent access is read-only with respect to dashboard state. Agents cannot dismiss or snooze attention items, edit follow-ups, rename/disconnect mailboxes, change settings, export/delete data, or send messages. Creating a tracker is a narrowly scoped append-only operation, not permission to mutate dashboard records or mailbox content. Actual insertion into a draft requires an explicitly authorized email-client integration or the browser extension; the connector must never silently modify or send an email.
 
 ## 5. Functional requirements
 
 ### 5.1 Identity and connected accounts
 
 - One application owner profile in the MVP.
-- Application authentication must be distinct from connected mailbox authorization.
+- Google OAuth is the only application login/signup option. The first successful login creates the owner profile.
+- Application authentication and connected-mailbox grants remain distinct internally even when they use the same Google identity, so additional mailboxes can be connected without changing the signed-in owner.
 - The owner can connect, rename, color-code, pause, reauthorize, and disconnect each mailbox.
 - OAuth tokens are stored encrypted, never returned to the browser, and refreshed only by the backend.
 - Disconnecting an account revokes its token when possible and offers immediate deletion of all derived data.
 - Duplicate connection of the same provider account is prevented.
+- The login surface contains one action: **Continue with Google**.
 
 ### 5.2 Synchronization
 
@@ -141,6 +156,25 @@ Ranking is deterministic in the MVP. It combines age, unread state, direct-recip
 - Show an audit trail for account connect, disconnect, sync, token refresh failure, export, and deletion events.
 - Provide a privacy page that enumerates stored fields and OAuth scopes.
 
+### 5.7 Outbound trackers
+
+- Create a unique tracker associated with an owner, mailbox, optional conversation/message draft reference, and recipient set.
+- Support an open-tracking image endpoint and tracked-link redirect endpoint, each using unguessable public tokens rather than internal IDs.
+- Record timestamp, event type, coarse user-agent category, and privacy-preserving network metadata; do not retain raw IP addresses by default.
+- Mark likely security-scanner, proxy/cache, duplicate, and owner-self-open events and exclude them from primary counts while preserving their auditability.
+- Allow the owner to disable tracking globally or per email and delete tracker event history.
+- Never claim that an event proves a human recipient read the message.
+
+### 5.8 Agent access
+
+- Expose a versioned MCP-compatible connector from the web application Worker.
+- Authenticate agents with owner-approved, revocable grants and explicit scopes.
+- Initial scopes are `dashboard:read` and `trackers:create`; there is no general dashboard write scope.
+- Every connector call is owner-bound, rate-limited, runtime validated, and audit logged.
+- Read tools use cursor pagination and return the same freshness/provenance indicators as the dashboard.
+- Tracker creation is append-only and idempotent when the caller supplies an idempotency key.
+- Connector resources and tools must not expose OAuth tokens, raw provider credentials, or data from an unselected mailbox.
+
 ## 6. Gmail feasibility and constraints
 
 The Gmail API supports message/thread access and incremental mailbox history. Gmail push notifications do not contain message data; they contain the mailbox identity and a new history ID. The backend must call `history.list` and fetch changed resources.
@@ -157,7 +191,7 @@ A Google Workspace Add-on is not selected for the MVP: it offers a Google-suppor
 
 ```text
 apps/
-  web/          # Cloudflare-hosted dashboard and HTTP API
+  web/          # TanStack Start landing page, dashboard, HTTP API, and agent connector
   extension/    # Chrome + Firefox WebExtension builds
 packages/
   core/         # Provider-neutral domain rules and derived-state logic
@@ -177,6 +211,8 @@ The `core` package must not import Gmail, Cloudflare, browser-extension, databas
 - **Cloudflare R2:** optional generated exports only; not message bodies or attachments.
 - **Cloudflare secrets/bindings:** OAuth client secret and token-encryption key.
 - **Google Cloud Pub/Sub:** Gmail notification transport to the Worker webhook.
+
+The web application uses React 19+, TanStack Start, Tailwind CSS, shadcn components, and ui-sdk behaviors/default styles. The `apps/web` application owns both the public landing page and authenticated dashboard; they are routes within one deployable application, not separate apps.
 
 Do not use Cloudflare KV as the source of truth for mailbox or follow-up state. It may be added only for disposable cache data.
 
@@ -249,9 +285,13 @@ Representative routes, subject to typed-contract refinement:
 - `DELETE /api/conversations/:id/follow-up`
 - `POST /api/attention/:id/dismiss`
 - `POST /api/attention/:id/snooze`
+- `POST /api/trackers`
+- `GET /t/:publicToken/pixel.gif`
+- `GET /t/:publicToken/click`
 - `POST /api/webhooks/google/pubsub`
 - `POST /api/exports`
 - `DELETE /api/owner/data`
+- `ALL /mcp` (MCP transport with scoped tools/resources)
 
 All collection endpoints use cursor pagination. API schemas are runtime validated and shared with the web and extension clients through `packages/contracts`.
 
@@ -318,6 +358,7 @@ OAuth verification readiness, production observability, recovery drills, perform
 
 ## 14. Acceptance criteria for MVP
 
+- The only signup/login control is Continue with Google, and a first successful Google login creates the owner profile.
 - The owner connects at least two Gmail accounts and sees both become current after asynchronous initial sync.
 - New mail and state changes normally appear within two minutes, with reconciliation recovering missed notifications.
 - The dashboard correctly distinguishes “awaiting me” and “awaiting them” for tested conversation fixtures.
@@ -325,18 +366,19 @@ OAuth verification readiness, production observability, recovery drills, perform
 - Follow-ups can be created, snoozed, completed, and removed without modifying Gmail.
 - Disconnecting and deleting a mailbox removes credentials and derived data and records the operation without sensitive content.
 - Chrome and Firefox builds install, authenticate, and show contextual tracker UI within Gmail.
+- An authorized agent can create an idempotent tracker artifact and read dashboard summaries through the connector but cannot mutate dashboard state or send mail.
+- Open/click events are labeled as probabilistic and likely proxy/scanner/self events are distinguished from primary engagement counts.
 - A Gmail DOM change cannot corrupt mail data or prevent use of the standalone dashboard.
 - Production deploys run on Cloudflare, apart from the required Google OAuth/Pub/Sub services.
 - All local preview access is through Portless.
 
 ## 15. Open decisions requiring owner approval
 
-1. **Primary interpretation:** confirm that the MVP is a personal mailbox intelligence/follow-up tracker, not recipient open/click tracking.
-2. **History window:** accept the proposed 90-day default or choose another initial import window.
-3. **Stored content:** approve metadata plus Gmail snippet storage, or choose metadata-only storage.
-4. **Authentication:** decide whether the owner signs in with one designated Google identity or a separate passkey/auth provider.
-5. **Namespace:** approve package names such as `mail-tracker-core`, or choose a scoped namespace such as `@jfdevelops` if supported by the CLI conventions.
-6. **Git initialization:** confirm whether the CLI should initialize Git in this currently empty directory.
+1. **History window:** accept the proposed 90-day default or choose another initial import window.
+2. **Stored content:** approve metadata plus Gmail snippet storage, or choose metadata-only storage.
+3. **Tracking defaults:** decide whether open/click tracking is opt-in per message or enabled by default with a per-message opt-out.
+4. **Agent insertion:** decide which mail clients/agent hosts should receive the first end-to-end tracker insertion integration beyond the MCP artifact response.
+5. **Namespace:** approve package names such as `mail-tracker-core`, or choose the `@jfdevelops` scope.
 
 ## 16. Future work
 
@@ -344,7 +386,7 @@ OAuth verification readiness, production observability, recovery drills, perform
 - Generic IMAP adapter, likely requiring a non-Cloudflare connector service for durable IMAP IDLE connections.
 - Google Workspace Add-on as a constrained but Google-supported Gmail surface.
 - Calendar/contact enrichment, local-only classification, and user-defined attention rules.
-- Optional outbound open/click tracking. This requires a sending/composition integration, tracking-domain and redirect infrastructure, explicit privacy controls, and UI that treats events as probabilistic because image blocking, proxies, scanners, and link protection create false positives and false negatives.
+- Additional agent write scopes after a separate security review, such as managing follow-ups or preparing drafts. Sending mail remains a distinct, explicit capability.
 
 ## 17. Reference basis
 

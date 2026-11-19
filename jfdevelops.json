@@ -17,7 +17,12 @@
       "options": {}
     }
   ],
-  "addons": [],
+  "addons": [
+    {
+      "name": "portless",
+      "options": {}
+    }
+  ],
   "agents": [
     "claude-code",
     "codex",
