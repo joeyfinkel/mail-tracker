@@ -5,6 +5,8 @@
   "type": "module",
   "packageManager": "pnpm@10.33.2",
   "scripts": {
+    "dev": "pnpm --filter mail-tracker-web dev",
+    "preview": "pnpm --filter mail-tracker-web preview",
     "build": "vp run -r build",
     "typecheck": "vp run -r typecheck",
     "test": "vp run -r test",
@@ -12,12 +14,21 @@
     "format:check": "biome format . && eslint ."
   },
   "devDependencies": {
+    "@biomejs/biome": "^2.6.4",
     "@jfdevelops/cli": "0.8.0",
-    "typescript": "^6.0.3",
-    "vite-plus": "^1.5.0",
     "@stylistic/eslint-plugin": "^5.10.0",
     "eslint": "^10.14.0",
+    "portless": "^0.18.1",
+    "typescript": "^6.0.3",
     "typescript-eslint": "^8.72.1",
-    "@biomejs/biome": "^2.6.4"
+    "vite-plus": "^1.5.0"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild",
+      "lightningcss",
+      "sharp",
+      "workerd"
+    ]
   }
 }
