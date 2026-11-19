@@ -1,8 +1,10 @@
-import { createRootRoute, HeadContent, Scripts } from '@tanstack/react-router';
+import { createRootRouteWithContext, HeadContent, Scripts } from '@tanstack/react-router';
 
+import type { DataClients } from '../integrations/data-clients';
+import { TanStackDevelopmentTools } from '../integrations/development-tools';
 import appCss from '../styles.css?url';
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<DataClients>()({
   head: () => ({
     meta: [
       {
@@ -34,6 +36,8 @@ function RootDocument({ children }: { children: React.ReactNode }) {
       </head>
       <body>
         {children}
+
+        <TanStackDevelopmentTools />
 
         <Scripts />
       </body>
