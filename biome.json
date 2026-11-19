@@ -10,6 +10,8 @@
       "!yarn.lock",
       "!bun.lock",
       "!**/dist",
+      "!**/.output",
+      "!**/.wxt",
       "!**/.wrangler",
       "!**/src/routeTree.gen.ts"
     ]

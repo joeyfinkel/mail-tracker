@@ -1,0 +1,86 @@
+:host,
+:root {
+  color: #171717;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  font-synthesis: none;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #fafafa;
+}
+
+button {
+  font: inherit;
+}
+
+.button {
+  align-items: center;
+  border: 1px solid transparent;
+  border-radius: 8px;
+  cursor: pointer;
+  display: inline-flex;
+  font-size: 14px;
+  font-weight: 600;
+  gap: 8px;
+  justify-content: center;
+  transition:
+    background-color 120ms ease,
+    border-color 120ms ease;
+}
+
+.button:focus-visible {
+  outline: 2px solid #2563eb;
+  outline-offset: 2px;
+}
+
+.button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+}
+
+.button--default {
+  background: #171717;
+  color: #fff;
+}
+
+.button--default:hover:not(:disabled) {
+  background: #303030;
+}
+
+.button--outline {
+  background: #fff;
+  border-color: #dedede;
+  color: #171717;
+}
+
+.button--outline:hover:not(:disabled),
+.button--ghost:hover:not(:disabled) {
+  background: #f1f1f1;
+}
+
+.button--ghost {
+  background: transparent;
+  color: #171717;
+}
+
+.button--default-size {
+  height: 40px;
+  padding: 0 16px;
+}
+
+.button--small {
+  height: 34px;
+  padding: 0 12px;
+}
+
+.button--icon {
+  height: 36px;
+  padding: 0;
+  width: 36px;
+}
