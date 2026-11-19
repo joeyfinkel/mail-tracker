@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react';
 import { Button } from '@/src/components/ui/button';
 import type { ExtensionSession } from '@/src/lib/messages';
 import { sendExtensionRequest } from '@/src/lib/runtime';
+import { cn } from '@/src/lib/utils';
 
 type ExtensionPanelProps = {
   compact?: boolean;
@@ -28,7 +29,7 @@ function ExtensionPanel({ compact = false }: ExtensionPanelProps) {
   }
 
   return (
-    <main className={compact ? 'panel panel--compact' : 'panel'}>
+    <main className={cn('panel', compact && 'panel--compact')}>
       <header className="panel__header">
         <span className="panel__mark" aria-hidden="true">
           <MailCheck size={18} />

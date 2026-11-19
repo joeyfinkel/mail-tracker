@@ -4,7 +4,7 @@ import typescriptEslint from 'typescript-eslint';
 
 export default [
   {
-    ignores: ['**/dist/**', '**/.wrangler/**', '**/src/routeTree.gen.ts'],
+    ignores: ['**/dist/**', '**/.output/**', '**/.wxt/**', '**/.wrangler/**', '**/src/routeTree.gen.ts'],
   },
   {
     files: ['**/*.{js,mjs,cjs,ts,mts,cts}'],
