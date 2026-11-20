@@ -46,6 +46,9 @@ importers:
       '@mail-tracker/ui':
         specifier: workspace:*
         version: link:../../packages/ui
+      '@tanstack/react-query':
+        specifier: ^5.108.1
+        version: 5.108.1(@types/react@19.3.0)(react@19.2.0)
       '@wxt-dev/module-react':
         specifier: 1.2.2
         version: 1.2.2(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))(wxt@0.21.5(esbuild@0.28.2)(eslint@10.15.0(jiti@2.7.0))(oxc-parser@0.120.0(@emnapi/core@2.0.0-beta.2)(@emnapi/runtime@2.0.0-beta.2))(rolldown@1.2.19)(typescript@6.0.3)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1)))
@@ -71,6 +74,12 @@ importers:
       '@types/react-dom':
         specifier: ^19.2.0
         version: 19.3.0(@types/react@19.3.0)
+      '@ui-sdk/core':
+        specifier: 0.1.0-beta.12
+        version: 0.1.0-beta.12
+      '@ui-sdk/react':
+        specifier: 0.1.0-beta.12
+        version: 0.1.0-beta.12(@types/react@19.3.0)(@ui-sdk/core@0.1.0-beta.12)(react-dom@19.2.0(react@19.2.0))(react@19.2.0)
       jsdom:
         specifier: ^27.4.0
         version: 27.4.0
@@ -6248,7 +6257,7 @@ snapshots:
       pathe: 2.0.3
       sirv: 3.0.2
       tinyrainbow: 3.2.0
-      vitest: 5.1.1(@types/node@22.20.5)(@vitest/browser-preview@5.1.1)(@vitest/ui@5.1.1(vitest@5.1.1))(@voidzero-dev/vite-plus-core@8.3.8000(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(typescript@6.0.3)(yaml@2.9.1))(jsdom@31.0.1)
+      vitest: 5.1.1(@types/node@22.20.5)(@vitest/browser-preview@5.1.1)(@vitest/ui@5.1.1)(jsdom@27.4.0)(vite@8.3.8(@types/node@22.20.5)(esbuild@0.28.2)(jiti@2.7.0)(yaml@2.9.1))
 
   '@vitest/utils@5.1.0':
     dependencies:

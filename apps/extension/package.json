@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@mail-tracker/ui": "workspace:*",
+    "@tanstack/react-query": "^5.108.1",
     "@wxt-dev/module-react": "1.2.2",
     "lucide-react": "^0.577.0",
     "react": "19.2.0",
@@ -25,6 +26,8 @@
     "@testing-library/react": "^16.3.3",
     "@types/react": "^19.2.0",
     "@types/react-dom": "^19.2.0",
+    "@ui-sdk/core": "0.1.0-beta.12",
+    "@ui-sdk/react": "0.1.0-beta.12",
     "jsdom": "^27.4.0",
     "typescript": "^6.0.3",
     "vitest": "^5.1.1",

@@ -1,28 +1,17 @@
 import { ExternalLink, MailCheck } from 'lucide-react';
-import { useEffect, useState } from 'react';
+import { useQuery } from '@tanstack/react-query';
 
 import { Button } from '@mail-tracker/ui/button';
 import { cn } from '@mail-tracker/ui/utils';
-import type { ExtensionSession } from '@/src/lib/messages';
 import { sendExtensionRequest } from '@/src/lib/runtime';
+import { extensionSessionQuery } from '@/src/queries/session';
 
 type ExtensionPanelProps = {
   compact?: boolean;
 };
 
 function ExtensionPanel({ compact = false }: ExtensionPanelProps) {
-  const [session, setSession] = useState<ExtensionSession | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  useEffect(() => {
-    void sendExtensionRequest({ type: 'get-session' }).then((response) => {
-      if (response.ok && 'session' in response) {
-        setSession(response.session);
-      }
-
-      setIsLoading(false);
-    });
-  }, []);
+  const { data: session, isPending } = useQuery(extensionSessionQuery);
 
   function openDashboard() {
     void sendExtensionRequest({ type: 'open-dashboard' });
@@ -43,7 +32,7 @@ function ExtensionPanel({ compact = false }: ExtensionPanelProps) {
       <section className="panel__content" aria-live="polite">
         <span className="status-dot" data-connected={Boolean(session)} />
         <div>
-          <strong>{isLoading ? 'Checking connection…' : session ? 'Connected' : 'Connect your account'}</strong>
+          <strong>{isPending ? 'Checking connection…' : session ? 'Connected' : 'Connect your account'}</strong>
           <p>
             {session
               ? 'Open Gmail to add trackers and see conversation context.'
