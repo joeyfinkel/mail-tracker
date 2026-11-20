@@ -10,9 +10,11 @@ export const Route = createFileRoute('/dashboard/')({
 const OverviewLayout = createResourceLayout({
   resource: 'overview',
   name: 'OverviewPage',
+  title: 'Your mail at a glance',
+  description: 'A focused view of engagement across every connected inbox.',
 });
 
-function OverviewPage() {
+export function OverviewPage() {
   return (
     <OverviewLayout>
       <DashboardOverview />
@@ -22,13 +24,9 @@ function OverviewPage() {
 
 export function DashboardOverview() {
   return (
-    <main className="space-y-6 p-5 lg:p-8">
-      <section className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
-        <div>
-          <p className="text-sm font-medium text-primary">Thursday, November 19</p>
-          <h1 className="mt-1 text-3xl font-semibold tracking-tight">Your mail at a glance</h1>
-          <p className="mt-2 text-muted-foreground">A focused view of engagement across every connected inbox.</p>
-        </div>
+    <>
+      <section className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+        <p className="text-sm font-medium text-primary">Thursday, November 19</p>
         <div className="flex items-center gap-2 rounded-lg border bg-background px-3 py-2 text-sm text-muted-foreground">
           <span className="rounded-full bg-accent px-2 py-0.5 text-xs font-medium text-accent-foreground">Demo data</span>
           Last synced <span className="font-medium text-foreground">2 min ago</span>
@@ -111,7 +109,7 @@ export function DashboardOverview() {
           </section>
         </div>
       </div>
-    </main>
+    </>
   );
 }
 

@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { expect, test } from 'vitest';
 
-import { DashboardOverview } from '../dashboard.index';
+import { OverviewPage } from '../dashboard.index';
 
 test('presents the dashboard summary as readable, labeled regions', () => {
-  render(<DashboardOverview />);
+  render(<OverviewPage />);
 
   expect(screen.getByRole('heading', { level: 1, name: 'Your mail at a glance' })).toBeDefined();
   expect(screen.getByRole('region', { name: 'Mail performance' })).toBeDefined();
