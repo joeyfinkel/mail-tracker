@@ -1,7 +1,7 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { ArrowUpRight, CheckCircle2, Clock3, Eye, MailOpen, MousePointerClick, Send } from 'lucide-react';
 
-import { createResourceConfig, createResourceLayout } from './-utils/dashboard-layout';
+import { createResourceConfig, createResourceLayout } from './-utils/layout';
 
 export const Route = createFileRoute('/dashboard/')({
   component: OverviewRoute,

@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { expect, test } from 'vitest';
 
-import { OverviewPage } from '../dashboard.index';
+import { OverviewPage } from '../index';
 
 test('presents the dashboard summary as readable, labeled regions', () => {
   render(<OverviewPage />);

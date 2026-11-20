@@ -1,6 +1,6 @@
 import { Navigate, createFileRoute } from '@tanstack/react-router';
-import { resources } from './-utils/dashboard-layout';
-import { dashboardPageConfig } from './-utils/dashboard-page-config';
+import { resources } from './-utils/layout';
+import { dashboardPageConfig } from './-utils/page-config';
 
 const dashboardResources = resources.omit('overview');
 

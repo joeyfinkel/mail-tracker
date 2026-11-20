@@ -1,5 +1,5 @@
 import { ResourcePlaceholder } from '../../-components/resource-placeholder';
-import { createResourceConfig, createResourceLayout } from '../../-utils/dashboard-layout';
+import { createResourceConfig, createResourceLayout } from '../../-utils/layout';
 
 const ActivityPage = createResourceLayout({
   resource: 'activity',

@@ -59,7 +59,9 @@ export const { createResourceConfig, createResourceLayout, createResourceLinks, 
                 return (
                   <Link
                     activeOptions={{ exact: item.resource === 'overview' }}
-                    activeProps={{ className: 'bg-accent text-accent-foreground' }}
+                    activeProps={{
+                      className: 'bg-accent text-accent-foreground',
+                    }}
                     className="flex shrink-0 items-center gap-3 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-accent-foreground"
                     key={item.resource}
                     to={destination}

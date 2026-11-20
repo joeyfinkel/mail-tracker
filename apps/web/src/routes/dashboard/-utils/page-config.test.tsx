@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import { describe, expect, test } from 'vitest';
 
-import { dashboardPageConfig } from './dashboard-page-config';
+import { dashboardPageConfig } from './page-config';
 
 describe('dashboard resource configuration', () => {
   test.each([
