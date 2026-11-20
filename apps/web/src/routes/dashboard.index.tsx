@@ -1,10 +1,10 @@
 import { createFileRoute } from '@tanstack/react-router';
 import { ArrowUpRight, CheckCircle2, Clock3, Eye, MailOpen, MousePointerClick, Send } from 'lucide-react';
 
-import { createResourceLayout } from './-utils/dashboard-layout';
+import { createResourceConfig, createResourceLayout } from './-utils/dashboard-layout';
 
 export const Route = createFileRoute('/dashboard/')({
-  component: OverviewPage,
+  component: OverviewRoute,
 });
 
 const OverviewLayout = createResourceLayout({
@@ -20,6 +20,18 @@ export function OverviewPage() {
       <DashboardOverview />
     </OverviewLayout>
   );
+}
+
+const overviewConfig = createResourceConfig.forResource('overview', {
+  component: <OverviewPage />,
+});
+
+const overviewPageConfig = createResourceConfig({
+  ...overviewConfig,
+});
+
+function OverviewRoute() {
+  return overviewPageConfig.getComponent({ resource: 'overview' });
 }
 
 export function DashboardOverview() {

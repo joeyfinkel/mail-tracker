@@ -12,7 +12,7 @@ import {
   DashboardSidebar,
 } from '../-components/layout';
 
-export const { createResourceLayout, createResourceLinks, Shell } = defineResourceLayout.withLayout({
+export const { createResourceConfig, createResourceLayout, createResourceLinks, resources, Shell } = defineResourceLayout.withLayout({
   resources: ['overview', 'activity', 'followUps', 'trackers', 'settings'],
   options: {
     title: reactNode(),
